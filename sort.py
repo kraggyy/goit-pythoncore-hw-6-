@@ -15,7 +15,7 @@ EXTENSIONS = {
 UNKNOWN_FOLDER = 'unknown'
 
 
-output_directory = "./sort_result"
+output_directory = "./"
 
 
 
