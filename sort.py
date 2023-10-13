@@ -5,19 +5,14 @@ from transliterate import translit
 
 EXTENSIONS = {
     'images': ('.jpeg', '.png', '.jpg', '.svg'),
-    'videos': ('.avi', '.mp4', '.mov', '.mkv'),
-    'documents': ('.doc', '.docx', '.txt', '.pdf', '.xlsx', '.pptx''.odt'),
-    'music': ('.mp3', '.ogg', '.wav', '.amr'),
+    'video': ('.avi', '.mp4', '.mov', '.mkv'),
+    'audio': ('.mp3', '.ogg', '.wav', '.amr'),
+    'documents': ('.doc', '.docx', '.txt', '.pdf', '.xlsx', '.pptx', '.odt'),
     'archives': ('.zip', '.gz', '.tar')
 }
 
-
 UNKNOWN_FOLDER = 'unknown'
-
-
-output_directory = "./"
-
-
+output_directory = "./output"  # Ваша вихідна папка
 
 def normalize(filename):
     # Функція для транслітерації та очищення імен файлів
@@ -29,10 +24,15 @@ def organize_files(directory):
     known_extensions = set()
     unknown_extensions = set()
     
-    for root, dirs, files in os.walk(directory):
+    for root, dirs, files in os.walk(directory, topdown=False):
+        for dir_name in dirs:
+            dir_path = os.path.join(root, dir_name)
+            if not os.listdir(dir_path):
+                os.rmdir(dir_path)  # Видалення порожньої папки
+        
         for file in files:
             # Отримати розширення файлу
-            _, extension = os.path.splitext(file)
+            filename, extension = os.path.splitext(file)
             extension = extension.lower()  # Перетворити розширення в нижній регістр
             
             # Визначити категорію файлу
@@ -44,14 +44,15 @@ def organize_files(directory):
                     break
             
             source_path = os.path.join(root, file)
-            target_path = os.path.join(output_directory, category, normalize(file))
+            target_dir = os.path.join(output_directory, category)
+            if not os.path.exists(target_dir):
+                os.makedirs(target_dir)
             
-            if not os.path.exists(os.path.join(output_directory, category)):
-                os.makedirs(os.path.join(output_directory, category))
+            target_file = os.path.join(target_dir, normalize(filename) + extension)
             
             # Перемістити та перейменувати файл
-            shutil.move(source_path, target_path)
-            
+            shutil.move(source_path, target_file)
+    
     # Повернути результати
     return known_extensions, unknown_extensions
 
