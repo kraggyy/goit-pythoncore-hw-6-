@@ -1,4 +1,16 @@
+import sys
 from setuptools import setup, find_namespace_packages
+from clean_folder.clean import organize_files
+
+def main():
+    if len(sys.argv) != 2:
+        print("Використання: python sort.py")
+    else:
+        directory = sys.argv[1]
+        known_extensions, unknown_extensions = organize_files(directory)
+
+if __name__ == "__main__":
+    main()
 
 setup(
     name='clean_folder',
@@ -9,5 +21,5 @@ setup(
     author_email='dan.tym@icloud.com',
     packages=find_namespace_packages(),
     install_requires=['markdown'],
-    entry_points={'console_scripts': ["clean-folder=clean_folder.clean:organize_files"]}
+    entry_points={'console_scripts': ["clean-folder=clean_folder.clean:main"]}
 )
