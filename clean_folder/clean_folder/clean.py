@@ -56,9 +56,9 @@ def organize_files(directory):
     # Повернути результати
     return known_extensions, unknown_extensions
 
-if __name__ == '__main__':
+def main():
     if len(sys.argv) != 2:
-        print("Використання: python sort.py <шлях до папки>")
+        print("Використання: python script.py <шлях до папки>")
     else:
         directory = sys.argv[1]
         known_extensions, unknown_extensions = organize_files(directory)
@@ -68,3 +68,6 @@ if __name__ == '__main__':
         
         print("Невідомі розширення:")
         print(unknown_extensions)
+
+if __name__ == '__main__':
+    main()
